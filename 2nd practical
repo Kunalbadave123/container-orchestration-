@@ -1,1 +1,29 @@
-aedgrdyvcujnm;iu rd
+sudo su
+
+apt update -y
+
+apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+apt install docker-ce docker-ce-cli containerd.io -y
+
+echo "FROM ubuntu:latest" >> Dockerfile
+
+echo "WORKDIR /app" >> Dockerfile
+
+echo "RUN apt update -y" >> Dockerfile
+
+echo "CMD echo 'Hello, this is a custom image' " >> Dockerfile
+
+docker build -t mycustomimage .
+
+docker tag mycustomimage kunalbadave07/mycustomimage
+
+docker login --username kunalbadave07 --password Kunal#303
+
+docker push kunalbadave07/mycustomimage
+
+docker run kunalbadave07/mycustomimage
