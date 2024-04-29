@@ -1,29 +1,51 @@
-sudo su
+#!/bin/bash
 
-apt update -y
+# Update package index
+sudo apt update
 
-apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y
+# Install Docker
+sudo apt install -y docker.io
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# Start and enable Docker
+sudo systemctl start docker
+sudo systemctl enable docker
 
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+# Create directory for Docker image
+mkdir docker
+cd docker
 
-apt install docker-ce docker-ce-cli containerd.io -y
+# Create Dockerfile
+cat << EOF > Dockerfile
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y nginx
+CMD ["nginx", "-g", "daemon off;"]
+EOF
 
-echo "FROM ubuntu:latest" >> Dockerfile
+# Build Docker image
+sudo docker build -t docker .
 
-echo "WORKDIR /app" >> Dockerfile
+# Log in to Docker Hub
+sudo docker login
 
-echo "RUN apt update -y" >> Dockerfile
+# Tag Docker image
+sudo docker tag docker kunalbadave07/k1
 
-echo "CMD echo 'Hello, this is a custom image' " >> Dockerfile
+# Push Docker image to Docker Hub
+sudo docker push kunalbadave07/k1
 
-docker build -t mycustomimage .
+# display the images
+sudo docker images
 
-docker tag mycustomimage kunalbadave07/mycustomimage
+# Delete local Docker image
+sudo docker rmi docker
 
-docker login --username kunalbadave07 --password Kunal#303
+# display the images
+sudo docker images
 
-docker push kunalbadave07/mycustomimage
 
-docker run kunalbadave07/mycustomimage
+# Pull Docker image from Docker Hub
+sudo docker pull kunalbadave07/k1
+
+# display the images
+sudo docker images
+
