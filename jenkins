@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Pull Jenkins image from Docker Hub
+docker pull jenkins
+
+# Run Jenkins container, expose ports and align them on Docker engine
+docker run -d -p 8080:8080 -p 50000:50000 jenkins
