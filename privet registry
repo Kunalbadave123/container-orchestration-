@@ -4,6 +4,9 @@
 
 #login in to your docker hub
 
+# pull the registry
+docker pull registry
+
 # Step 1: Install Docker Registry
 docker run -d -p 5000:5000 --name registry registry:2
 
