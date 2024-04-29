@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Step 1: Install Docker Registry
+docker run -d -p 5000:5000 --name registry registry:2
+
+# Step 2: Tag Your Image
+docker tag your-image localhost:5000/centos:latest
+
+# Step 3: Push Your Image to the Private Registry
+docker push localhost:5000/centos:latest
+
+# Step 4: Verify Image Push
+docker pull localhost:5000/centos:latest
